@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <title>禁止打开盖子</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            scroll-behavior: smooth;
+        }
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background: #cecece;
+        }
+        .box {
+            width: 20em;
+            height: 12em;
+            background: #0f0f0f;
+            overflow: hidden;
+            border-radius: 1em;
+            cursor: not-allowed;
+            position: relative;
+            margin: 1em;
+            border: 0;
+            box-shadow: 0.1em 0.1em 0.2em 0 #fff3, -0.1em -0.1em 0.2em 0 #0003;
+        }
+        .box .inset {
+            background: #cecece;
+            border-radius: 0.9em;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            box-shadow: inset 0em 0em 0em 0em #0006, inset 0.1em 0.1em 0.2em 0 #fff3,
+            inset -0.1em -0.1em 0.2em 0 #0003;
+        }
+        .box .inset::before {
+            content: '';
+            display: block;
+            width: 0.8em;
+            height: 7em;
+            box-shadow: inset -0.1em -0.1em 0.1em 0.1em #fff3, inset 0.1em 0.1em
+            0.1em 0.1em #0003;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            left: 1em;
+        }
+        .box.moving {
+            pointer-events: none;
+        }
+        .box.pushed .inset {
+            animation: pushed 2s ease-in-out forwards;
+        }
+        .box.reverse .inset {
+            animation: pushed 0.6s ease-in-out reverse forwards;
+        }
+        @keyframes pushed {
+            0% {
+                box-shadow: inset 0em 0em 0em 0em #0006, inset 0.1em 0.1em 0.2em 0
+                #fff3, inset -0.1em -0.1em 0.2em 0 #0003;
+                scale: 1;
+                translate: 0%;
+            }
+            24% {
+                box-shadow: inset 1.6em 1.6em 1em 0em #0006, inset 0.1em 0.1em 0.2em 0
+                #fff3, inset -0.1em -0.1em 0.2em 0 #0003;
+                translate: 0%;
+                scale: 0.9;
+            }
+            100% {
+                box-shadow: inset -2.8em 1.6em 1em 0em #0006, inset 0.1em 0.1em 0.2em
+                0 #fff3, inset -0.1em -0.1em 0.2em 0 #0003;
+                translate: 88%;
+                scale: 0.9;
+            }
+        }
+        .box .inset::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M32,62A30,30,0,1,0,2,32,30,30,0,0,0,32,62ZM32,4A28,28,0,1,1,4,32,28,28,0,0,1,32,4Z"/><path d="M13.4 49.74h0a1 1 0 0 0 .71-.29L49.45 14.14a1 1 0 0 0 0-1.45A26 26 0 0 0 12.69 49.41 1 1 0 0 0 13.4 49.74zM26 32V17.5a1.5 1.5 0 0 1 3 0V31.76l-8 8V20.5a1.5 1.5 0 0 1 3 0V32zM37.5 16A1.5 1.5 0 0 1 39 17.5v4.26l-3 3V17.5A1.5 1.5 0 0 1 37.5 16zM34 17.5v9.26l-3 3V14.5a1.5 1.5 0 0 1 3 0zM32 8a24 24 0 0 1 15.27 5.48L41 19.76V17.5a3.47 3.47 0 0 0-5-3.14A3.53 3.53 0 0 0 35 12a3.5 3.5 0 0 0-6 2.34A3.36 3.36 0 0 0 27.5 14 3.5 3.5 0 0 0 24 17.36 3.36 3.36 0 0 0 22.5 17 3.5 3.5 0 0 0 19 20.5V41.76l-5.52 5.51A24 24 0 0 1 32 8zM15.63 50.78a1 1 0 0 0 .08 1.49A26 26 0 0 0 52.27 15.71a1 1 0 0 0-1.49-.08L20.45 46zM51.39 17.85A24 24 0 0 1 17.85 51.39L21 48.27A11 11 0 0 0 30 53h1.67a11 11 0 0 0 8-3.48L50.17 38.35A3.72 3.72 0 0 0 48 32.12a3.66 3.66 0 0 0-2.75.71L41 36V28.24zm-11.84 21a1 1 0 0 0 1.05-.09l5.83-4.37a1.7 1.7 0 0 1 2.39.33 1.74 1.74 0 0 1 .35 1A1.72 1.72 0 0 1 48.71 37L38.23 48.16A9 9 0 0 1 31.67 51H30a8.94 8.94 0 0 1-7.57-4.18L39 30.24V38A1 1 0 0 0 39.55 38.89z"/></svg>');
+            background-position: 50% 50%;
+            background-size: 24%;
+            background-repeat: no-repeat;
+            position: absolute;
+            opacity: 0.05;
+            transition: all 0.2s ease-in-out;
+        }
+        .box .inset:hover::after {
+            animation: red-glow 2s infinite ease-out;
+        }
+        @keyframes red-glow {
+            0% {
+                opacity: 0.1;
+                filter: invert(10%) sepia(90%) saturate(4763%) hue-rotate(357deg)
+                brightness(140%) contrast(114%) drop-shadow(0 0 0px red);
+            }
+            50% {
+                opacity: 0.3;
+                filter: invert(10%) sepia(90%) saturate(4763%) hue-rotate(357deg)
+                brightness(140%) contrast(114%) drop-shadow(0 0 4px red);
+            }
+            100% {
+                opacity: 0.1;
+                filter: invert(10%) sepia(90%) saturate(4763%) hue-rotate(357deg)
+                brightness(140%) contrast(114%) drop-shadow(0 0 0px red);
+            }
+        }
+
+        .diamond {
+            --_size: 2em;
+            --_ratio: 1.8;
+            --_speed: 2s;
+            --_clr-main: hsl(0, 100%, 50%);
+            --_clr-light: hsl(0, 100%, 90%);
+            --_clr-dark: hsl(0, 100%, 20%);
+
+            width: 0;
+            height: 0;
+            border: var(--_size) solid transparent;
+            border-bottom: calc(var(--_ratio) * var(--_size)) solid var(--_clr-main);
+            top: calc(0px - var(--_size));
+
+            animation: hueAni 12s linear infinite;
+
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 50%;
+            margin: auto;
+
+            transform-origin: 50% 100%;
+            opacity: 0.8;
+            transition: all 0.4s ease-in-out;
+        }
+        .box .diamond:hover {
+            opacity: 1;
+            scale: 1.2;
+        }
+        @keyframes hueAni {
+            0% {
+                filter: hue-rotate(0deg);
+                rotate: 0;
+            }
+            100% {
+                filter: hue-rotate(360deg);
+                rotate: -360deg;
+            }
+        }
+
+        .diamond::after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 4em;
+            left: -2em;
+            height: 7.2em;
+            z-index: -1;
+            border-radius: 100%;
+
+            background: var(--_clr-main);
+            opacity: 1;
+            filter: blur(20px);
+        }
+        .diamond::before {
+            content: '';
+            position: absolute;
+            left: calc(0px - var(--_size));
+            top: calc(var(--_ratio) * var(--_size) - 0px);
+            width: 0;
+            height: 0;
+            border: var(--_size) solid transparent;
+            border-top: calc(var(--_ratio) * var(--_size)) solid var(--_clr-main);
+        }
+
+        .diamond .t {
+            position: absolute;
+            right: calc(0.1px - var(--_size));
+            top: 0px;
+            width: 0;
+            height: 0;
+            border-bottom: calc(var(--_ratio) * var(--_size)) solid var(
+                    --_clr-light
+            );
+            border-right: var(--_size) solid transparent;
+        }
+        .diamond .t::before {
+            content: '';
+            position: absolute;
+            left: calc(1px - var(--_size));
+            top: 0px;
+            width: 0;
+            height: 0;
+            border-left: var(--_size) solid transparent;
+
+            transform-origin: 100% 0%;
+
+            animation: ani-t var(--_speed) infinite linear reverse, ani-t2 var(
+                    --_speed
+            ) infinite linear;
+        }
+        .diamond .t::after {
+            content: '';
+            position: absolute;
+            right: calc(0px - var(--_size));
+            top: 0px;
+            width: 0;
+            height: 0;
+            border-right: var(--_size) solid transparent;
+            transform-origin: 0% 0%;
+
+            animation: ani-t var(--_speed) infinite linear, ani-t2 var(--_speed) infinite
+            linear;
+        }
+
+        @keyframes ani-t {
+            0% {
+                transform: scaleX(0);
+            }
+            100% {
+                transform: scaleX(1);
+            }
+        }
+        @keyframes ani-t2 {
+            0% {
+                border-bottom: calc(var(--_ratio) * var(--_size)) solid var(
+                        --_clr-main
+                );
+            }
+            100% {
+                border-bottom: calc(var(--_ratio) * var(--_size)) solid var(
+                        --_clr-light
+                );
+            }
+        }
+
+        .diamond .b {
+            position: absolute;
+            left: calc(0.1px - var(--_size));
+            top: calc(var(--_ratio) * var(--_size));
+            width: 0;
+            height: 0;
+            border-top: calc(var(--_ratio) * var(--_size)) solid var(--_clr-dark);
+            border-left: var(--_size) solid transparent;
+        }
+        .diamond .b::before {
+            content: '';
+            position: absolute;
+            left: calc(1px - var(--_size));
+            top: calc(0px - var(--_size) * var(--_ratio));
+            width: 0;
+            height: 0;
+            border-left: var(--_size) solid transparent;
+            transform-origin: 100% 0%;
+
+            animation: ani-b var(--_speed) infinite linear reverse, ani-b2 var(
+                    --_speed
+            ) infinite linear;
+        }
+        .diamond .b::after {
+            content: '';
+            position: absolute;
+            right: calc(0px - var(--_size));
+            top: calc(0px - var(--_size) * var(--_ratio));
+            width: 0;
+            height: 0;
+            border-right: var(--_size) solid transparent;
+            transform-origin: 0% 0%;
+
+            animation: ani-b var(--_speed) infinite linear, ani-b2 var(--_speed) infinite
+            linear;
+        }
+
+        @keyframes ani-b {
+            0% {
+                transform: scaleX(0);
+            }
+            100% {
+                transform: scaleX(1);
+            }
+        }
+        @keyframes ani-b2 {
+            0% {
+                border-top: calc(var(--_ratio) * var(--_size)) solid var(--_clr-dark);
+            }
+            100% {
+                border-top: calc(var(--_ratio) * var(--_size)) solid var(--_clr-main);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="diamond">
+        <span class="t"></span>
+        <span class="b"></span>
+    </div>
+    <div class="inset"></div>
+</div>
+<script>
+	const box = document.querySelector('.box');
+	let isPushed = false;
+	box.addEventListener('click', () => {
+		if (box.classList.contains('moving')) return;
+		box.classList.add('moving');
+		box.classList.remove('pushed', 'reverse');
+		void box.offsetWidth;
+		if (isPushed) {
+			box.classList.add('reverse');
+		} else {
+			box.classList.add('pushed');
+		}
+		isPushed = !isPushed;
+	});
+	box.addEventListener('animationend', () => {
+		box.classList.remove('moving');
+	});
+</script>
+</body>
+</html>
